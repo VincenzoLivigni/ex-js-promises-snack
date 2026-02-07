@@ -23,12 +23,44 @@ getPostTitle(7)
     .catch(err => console.log(err))
 */
 
+
 /*
-Snack 2
-Crea la funzione lanciaDado() che restituisce una Promise che, dopo 3 secondi, genera un numero casuale tra 1 e 6.
-Tuttavia, nel 20 % dei casi, il dado si "incastra" e la Promise va in reject.
+Bonus snack 1 - ✔️ 
+Ottieni l'intero post con l'autore
+Crea una funzione getPost(id) che recupera l'intero post. Concatena una seconda chiamata che aggiunge una proprietà user che contiene i dati dell'autore, recuperati dalla chiamata https://dummyjson.com/users/{post.userId}.
 */
 
+function getPost(id) {
+
+    const promessa = new Promise((resolve, reject) => {
+        fetch(`https://dummyjson.com/posts/${id}`)
+            .then(res => res.json())
+            .then(post => {
+                fetch(`https://dummyjson.com/users/${post.userId}`)
+                    .then(res => res.json())
+                    .then(utente => {
+                        post.utente = utente
+                        resolve(post)
+                    })
+                    .catch(reject)
+            })
+            .catch(reject)
+    })
+
+    return promessa
+}
+
+getPost(1)
+    .then(risultato => console.log(risultato))
+    .catch(err => console.log(err))
+
+
+/*
+Snack 2 - ✔️ 
+Crea la funzione lanciaDado() che restituisce una Promise che, dopo 3 secondi, genera un numero casuale tra 1 e 6. Tuttavia, nel 20 % dei casi, il dado si "incastra" e la Promise va in reject.
+*/
+
+/*
 function lanciaDado() {
 
     const promessa = new Promise((resolve, reject) => {
@@ -51,3 +83,4 @@ function lanciaDado() {
 lanciaDado()
     .then(numeroRandom => console.log(numeroRandom))
     .catch(err => console.log(err))
+*/
