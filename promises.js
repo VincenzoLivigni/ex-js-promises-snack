@@ -28,7 +28,7 @@ getPostTitle(7)
 Bonus snack 1 - ✔️ 
 Ottieni l'intero post con l'autore
 Crea una funzione getPost(id) che recupera l'intero post. Concatena una seconda chiamata che aggiunge una proprietà user che contiene i dati dell'autore, recuperati dalla chiamata https://dummyjson.com/users/{post.userId}.
-*/
+
 
 function getPost(id) {
 
@@ -53,14 +53,13 @@ function getPost(id) {
 getPost(1)
     .then(risultato => console.log(risultato))
     .catch(err => console.log(err))
-
+*/
 
 /*
 Snack 2 - ✔️ 
 Crea la funzione lanciaDado() che restituisce una Promise che, dopo 3 secondi, genera un numero casuale tra 1 e 6. Tuttavia, nel 20 % dei casi, il dado si "incastra" e la Promise va in reject.
-*/
 
-/*
+
 function lanciaDado() {
 
     const promessa = new Promise((resolve, reject) => {
@@ -84,3 +83,49 @@ lanciaDado()
     .then(numeroRandom => console.log(numeroRandom))
     .catch(err => console.log(err))
 */
+
+
+/*
+Bonus: HOF con closure per memorizzare l'ultimo lancio
+Modifica la funzione in creaLanciaDado(), che restituisce una closure che memorizza l'ultimo risultato. Se il numero esce due volte di fila, stampa "Incredibile!".
+*/
+
+function creaLanciaDado() {
+
+    let ultimoTiro = null
+
+    return function () {
+
+        return new Promise((resolve, reject) => {
+
+            const numeroRandom = Math.floor(Math.random() * 6) + 1
+            const dadoIncastrato = Math.random()
+
+            setTimeout(() => {
+                if (dadoIncastrato < 0.2) {
+                    reject("Il dado si è incastrato...rimarremo sempre nel dubbio, quale numero sarebbe uscito?")
+                    return
+                }
+
+                if (numeroRandom === ultimoTiro) {
+                    console.log("Incredibile!");
+                }
+
+                ultimoTiro = numeroRandom
+
+                resolve(numeroRandom)
+            }, 3000)
+        })
+    }
+}
+
+const lanciaDado = creaLanciaDado()
+
+lanciaDado()
+    .then(numero => console.log("Primo numero:", numero))
+    .catch(err => console.log(err))
+
+
+lanciaDado()
+    .then(numero => console.log("Secondo numero:", numero))
+    .catch(err => console.log(err))
